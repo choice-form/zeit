@@ -3,7 +3,7 @@
   "name": "@choiceform/zeit",
   "version": "0.1.0",
   "description": "Lightweight undo/redo management library based on Zustand Vanilla.",
-  "homepage": "https://github.com/choice-form/zeit",
+  "homepage": "https://choice-form.github.io/zeit",
   "bugs": {
     "url": "https://github.com/choice-form/zeit/issues"
   },
