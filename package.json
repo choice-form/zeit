@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json.schemastore.org/package",
+  "name": "@choiceform/zeit",
+  "version": "0.1.0",
+  "description": "Lightweight undo/redo management library based on Zustand Vanilla.",
+  "homepage": "https://github.com/choice-form/zeit",
+  "bugs": {
+    "url": "https://github.com/choice-form/zeit/issues"
+  },
+  "repository": {
+    "url": "https://github.com/choice-form/zeit.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Choiceform",
+    "email": "developer@choiceform.com",
+    "url": "https://developer.choiceform.com"
+  },
+  "contributors": [
+    "余凡 <albert.yu@choiceform.com>"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.global.js"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.cts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup --clean",
+    "build:watch": "tsup --watch",
+    "doc": "BROWSER=\"google chrome\" vite dev",
+    "doc:gen": "typedoc",
+    "format": "prettier . --cache --write",
+    "lint": "eslint . --cache",
+    "lint:types": "tsc --noEmit",
+    "release": "pnpm publish"
+  },
+  "devDependencies": {
+    "@microsoft/api-extractor": "7.38.5",
+    "@typescript-eslint/eslint-plugin": "6.14.0",
+    "@typescript-eslint/parser": "6.14.0",
+    "eslint": "8.56.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-unused-imports": "3.0.0",
+    "prettier": "3.1.1",
+    "prettier-plugin-packagejson": "2.4.7",
+    "tsup": "8.0.1",
+    "typedoc": "0.25.4",
+    "typedoc-plugin-mdn-links": "3.1.7",
+    "typedoc-theme-hierarchy": "4.1.2",
+    "typescript": "5.3.3",
+    "vite": "5.0.10"
+  },
+  "peerDependencies": {
+    "zustand": "4.4.6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

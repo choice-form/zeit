@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "allowJs": false,
+    "baseUrl": ".",
+    "composite": false,
+    "disableSourceOfProjectReferenceRedirect": true,
+    "esModuleInterop": false,
+    "incremental": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "noEmitHelpers": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "importHelpers": true,
+    "isolatedModules": true,
+    "paths": {
+      "~/*": ["src/*"]
+    },
+    "preserveSymlinks": false,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "target": "ESNext",
+    "tsBuildInfoFile": ".tsbuildinfo",
+    "types": [],
+    "useDefineForClassFields": true
+  },
+  "exclude": ["dist", "docs", "node_modules"]
+}
