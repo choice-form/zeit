@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package",
   "name": "@choiceform/zeit",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Lightweight undo/redo management library based on Zustand Vanilla.",
   "homepage": "https://choice-form.github.io/zeit",
   "bugs": {
@@ -41,7 +41,7 @@
     "format": "prettier . --cache --write",
     "lint": "eslint . --cache",
     "lint:types": "tsc --noEmit",
-    "release": "pnpm publish"
+    "release": "pnpm build && pnpm publish"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "7.38.5",
