@@ -125,11 +125,11 @@ export class Zeit<State extends object, DerivedState extends object> {
   }
 
   public get canRedo() {
-    return this._cursor > -1
+    return this._cursor < this._stack.length - 1
   }
 
   public get canUndo() {
-    return this._cursor < this._stack.length - 1
+    return this._cursor > -1
   }
 
   public saveSnapshot() {
