@@ -4,8 +4,11 @@ import { derivable } from './middlewares'
 import type { Command, Patch } from './types'
 import { deepCopy, merge } from './utils'
 
-export class Zeit<State extends object, DerivedState extends object> {
-  constructor(initialState: State, compute: (state: State) => DerivedState) {
+export class Zeit<State extends object, DerivedState> {
+  constructor(
+    initialState: State,
+    compute: (state: State) => DerivedState = () => Object.create(null),
+  ) {
     this._initialState = initialState
     this._snapshot = deepCopy(initialState)
     this._store = createStore<State & DerivedState>()(
@@ -26,9 +29,11 @@ export class Zeit<State extends object, DerivedState extends object> {
 
   private _stack: Command<State>[] = []
 
-  private _applyPatch(patchState: Patch<State>, id?: string) {
+  private _applyPatch(patchState: Patch<State>, id?: string, shallow = false) {
     const prev = this._state
-    const next = merge(this._state, patchState)
+    const next = shallow
+      ? Object.assign({}, this._state, patchState)
+      : merge(this._state, patchState)
     const finale = this.commit(next, prev, patchState, id)
 
     this.onStateWillChange?.(finale, id)
@@ -52,6 +57,12 @@ export class Zeit<State extends object, DerivedState extends object> {
 
   public patch(patchState: Patch<State>) {
     this._applyPatch(patchState)
+    this.onPatch?.(this._state)
+    return this
+  }
+
+  public shallowPatch(patchState: Patch<State>) {
+    this._applyPatch(patchState, undefined, true)
     this.onPatch?.(this._state)
     return this
   }
@@ -104,6 +115,18 @@ export class Zeit<State extends object, DerivedState extends object> {
     this._cursor = this._stack.length - 1
 
     this._applyPatch(command.next, id)
+    this.onCommand?.(command, id)
+    return this
+  }
+
+  public shallowExecute(command: Command<State>, id = command.id) {
+    if (this._cursor < this._stack.length - 1) {
+      this._stack = this._stack.slice(0, this._cursor + 1)
+    }
+    this._stack.push({ ...command, id })
+    this._cursor = this._stack.length - 1
+
+    this._applyPatch(command.next, id, true)
     this.onCommand?.(command, id)
     return this
   }

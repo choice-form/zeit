@@ -89,7 +89,7 @@ export const useStore = (selector) => _useStore(store, selector)
 把新的 `useStore` hook 作为主要的访问状态的手段，下面是一个实例：
 
 ```tsx
-import { useStore } from 'my-app/hooks/use-store'
+import { useStore } from "my-app/hooks/use-store"
 
 // 尽可能把 selector 定义在组件之外已得到最好的渲染优化，否则应该用 `useCallback` 封装。
 const countSelector = (state: State) => state.count
@@ -107,8 +107,8 @@ function SomeComponent() {
 如果需要细粒度的渲染控制，也可以实现对 `selector` 返回状态的引用相等性检查版本的 `useStore`：
 
 ```ts
-import { useStoreWithEqualityFn } from 'zustand/traditional'
-import { store, type State } from 'my-app/store'
+import { useStoreWithEqualityFn } from "zustand/traditional"
+import { store, type State } from "my-app/store"
 
 export function useStore<T>(
   selector: (state: State) => T,
@@ -139,7 +139,7 @@ const position = useMemo(() => ({ x: pointX, y: pointY }), [pointX, pointY])
 ```ts
 const position = useStore(
   (state) => ({ x: state.pointX, y: state.pointY }),
-  (prev, next) => prev.x === next.x && prev.y === next.y
+  (prev, next) => prev.x === next.x && prev.y === next.y,
 )
 ```
 
@@ -150,8 +150,8 @@ const position = useStore(
 1. 修改 `Map` 类型的数据，不涉及历史记录：
 
 ```ts
-import { create } from 'mutative'
-import { store } from 'my-app/store'
+import { create } from "mutative"
+import { store } from "my-app/store"
 
 function setTodoItem(id: string, item: TodoItem) {
   const [draft, finalize] = create(store.state.todosMap)
@@ -163,8 +163,8 @@ function setTodoItem(id: string, item: TodoItem) {
 2. 修改 `Array` 类型的数据，并支持历史记录：
 
 ```ts
-import { create, original } from 'mutative'
-import { store } from 'my-app/store'
+import { create, original } from "mutative"
+import { store } from "my-app/store"
 
 function deleteTodoItem(id) {
   const index = store.state.todoList.findIndex((todo) => todo.id === id)
@@ -174,7 +174,7 @@ function deleteTodoItem(id) {
     draft.splice(index, 1)
     store.execute({
       prev: { todoList: original(draft) },
-      next: { todoList: finalize() }
+      next: { todoList: finalize() },
     })
   }
 }
@@ -199,6 +199,29 @@ class Store extends Zeit {
   }
 }
 ```
+
+### `shallowPatch(patchState: Patch<State>): this`
+
+`shallowPatch` 和 `patch` 区别在于对于根状态前者使用浅拷贝，后者则使用（递归）深
+拷贝。当合并根状态对象时，如果一个属性本身就是对象字面量，深拷贝会不断递归合并，
+遇到同名属性覆盖，其他属性则保留；但浅拷贝就直接覆盖这个属性了。
+
+有时候修改的意图是要删除对象中的属性，那么只有浅拷贝直接把对象覆盖才能达成意图。例如：
+
+```ts
+/**
+ * 假设初始状态为：`{ object: { foo: 'foo', bar: 'bar' } }`
+ * 修改意图是去掉 `foo` 和更新 `bar`，则：
+ */
+
+// 深拷贝
+zeit.patch({ object: { bar: 'new bar' } }) // <- 结果是：`{ foo: 'foo', bar: 'new bar' }`
+
+// 浅拷贝
+zeit.shallowPatch({ object: { bar: 'new bar' } }) // <- 结果是 : `{ bar: 'new bar' }`
+```
+
+> `execute` 方法也有一个浅拷贝版本 `shallowExecute`
 
 ### `replace(state: State): this`
 
