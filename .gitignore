@@ -1,5 +1,2 @@
-/dist/
-/playwright-report/
-/playwright/.cache/
-/test-results/
-node_modules
+dist/
+node_modules/
